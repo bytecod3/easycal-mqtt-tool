@@ -20,6 +20,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("My app")
 
         tabs = QTabWidget()
+
         tabs.setTabPosition(QTabWidget.North)
         tabs.setMovable(True)
 
