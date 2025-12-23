@@ -7,8 +7,16 @@
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\main.py||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\emwit\\Desktop\\work\\projects\\easycal-mqtt-tool\\src\\custom_dialog.py||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\custom_dialog.py||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\emwit\\Desktop\\work\\projects\\easycal-mqtt-tool\\src\\light-style.qss||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\light-style.qss||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\emwit\\Desktop\\work\\projects\\easycal-mqtt-tool\\src\\style.qss||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\style.qss||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\emwit\\Desktop\\work\\projects\\easycal-mqtt-tool\\src\\wifi_handler.py||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\wifi_handler.py||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\emwit\\Desktop\\work\\projects\\easycal-mqtt-tool\\playground\\toolbars.py||{8B382828-6202-11D1-8870-0000F87579D2}",
@@ -41,12 +49,25 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 144,
-          "SelectedChildIndex": 1,
+          "DockedWidth": 204,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 1,
+              "Title": "light-style.qss",
+              "DocumentMoniker": "C:\\Users\\emwit\\Desktop\\work\\projects\\easycal-mqtt-tool\\src\\light-style.qss",
+              "RelativeDocumentMoniker": "src\\light-style.qss",
+              "ToolTip": "C:\\Users\\emwit\\Desktop\\work\\projects\\easycal-mqtt-tool\\src\\light-style.qss",
+              "RelativeToolTip": "src\\light-style.qss",
+              "ViewState": "AgIAAOwBAAAAAAAAAAAUwP4BAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-12-23T12:03:02.162Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "themes.py",
               "DocumentMoniker": "C:\\Users\\emwit\\Desktop\\work\\projects\\easycal-mqtt-tool\\src\\themes.py",
               "RelativeDocumentMoniker": "src\\themes.py",
@@ -65,7 +86,7 @@
               "RelativeDocumentMoniker": "src\\main.py",
               "ToolTip": "C:\\Users\\emwit\\Desktop\\work\\projects\\easycal-mqtt-tool\\src\\main.py",
               "RelativeToolTip": "src\\main.py",
-              "ViewState": "AgIAAK4AAAAAAAAAAAAAAL0AAAAMAAAAAAAAAA==",
+              "ViewState": "AgIAAOoAAAAAAAAAAAAAAPgAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2025-12-22T15:04:24.356Z",
               "EditorCaption": ""
@@ -73,12 +94,25 @@
           ]
         },
         {
-          "DockedWidth": 256,
-          "SelectedChildIndex": 1,
+          "DockedWidth": 196,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
+              "Title": "style.qss",
+              "DocumentMoniker": "C:\\Users\\emwit\\Desktop\\work\\projects\\easycal-mqtt-tool\\src\\style.qss",
+              "RelativeDocumentMoniker": "src\\style.qss",
+              "ToolTip": "C:\\Users\\emwit\\Desktop\\work\\projects\\easycal-mqtt-tool\\src\\style.qss",
+              "RelativeToolTip": "src\\style.qss",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-12-23T11:25:47.399Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "layouts.py",
               "DocumentMoniker": "C:\\Users\\emwit\\Desktop\\work\\projects\\easycal-mqtt-tool\\playground\\layouts.py",
               "RelativeDocumentMoniker": "playground\\layouts.py",
@@ -90,20 +124,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "custom_dialog.py",
-              "DocumentMoniker": "C:\\Users\\emwit\\Desktop\\work\\projects\\easycal-mqtt-tool\\src\\custom_dialog.py",
-              "RelativeDocumentMoniker": "src\\custom_dialog.py",
-              "ToolTip": "C:\\Users\\emwit\\Desktop\\work\\projects\\easycal-mqtt-tool\\src\\custom_dialog.py",
-              "RelativeToolTip": "src\\custom_dialog.py",
-              "ViewState": "AgIAAEgAAAAAAAAAAAAAAGAAAAAyAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "wifi_handler.py",
+              "DocumentMoniker": "C:\\Users\\emwit\\Desktop\\work\\projects\\easycal-mqtt-tool\\src\\wifi_handler.py",
+              "RelativeDocumentMoniker": "src\\wifi_handler.py",
+              "ToolTip": "C:\\Users\\emwit\\Desktop\\work\\projects\\easycal-mqtt-tool\\src\\wifi_handler.py",
+              "RelativeToolTip": "src\\wifi_handler.py",
+              "ViewState": "AgIAAH0AAAAAAAAAAAAYwJIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2025-12-23T08:23:00.063Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "tabbed.py",
               "DocumentMoniker": "C:\\Users\\emwit\\Desktop\\work\\projects\\easycal-mqtt-tool\\playground\\tabbed.py",
               "RelativeDocumentMoniker": "playground\\tabbed.py",
@@ -115,7 +149,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "toolbars.py",
               "DocumentMoniker": "C:\\Users\\emwit\\Desktop\\work\\projects\\easycal-mqtt-tool\\playground\\toolbars.py",
               "RelativeDocumentMoniker": "playground\\toolbars.py",
@@ -123,12 +157,11 @@
               "RelativeToolTip": "playground\\toolbars.py",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACsAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-12-22T15:54:54.388Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-22T15:54:54.388Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "app_template.py",
               "DocumentMoniker": "C:\\Users\\emwit\\Desktop\\work\\projects\\easycal-mqtt-tool\\playground\\app_template.py",
               "RelativeDocumentMoniker": "playground\\app_template.py",
@@ -136,12 +169,11 @@
               "RelativeToolTip": "playground\\app_template.py",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-12-22T15:04:35.078Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-12-22T15:04:35.078Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "app.py",
               "DocumentMoniker": "C:\\Users\\emwit\\Desktop\\work\\projects\\easycal-mqtt-tool\\playground\\app.py",
               "RelativeDocumentMoniker": "playground\\app.py",

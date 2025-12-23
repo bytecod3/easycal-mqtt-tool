@@ -8,6 +8,7 @@ from PyQt5.QtCore import Qt, QSize, QThread, pyqtSignal
 from PyQt5.QtGui import QIcon, QKeySequence
 from PyQt5.QtWidgets import (
     QDialog,
+    QStyleFactory,
     QWidget,
     QAction,
     QApplication,
@@ -26,8 +27,7 @@ from PyQt5.QtWidgets import (
 import os, sys, subprocess
 from pathlib import Path
 import time 
-from custom_dialog import CustomDialog
-
+from wifi_handler import WiFiHandler
 
 # resolve icons absolute paths
 script_dir = Path(__file__).parent
@@ -40,69 +40,10 @@ metadata = {
 }
 
 # button list 
-side_panel_btns = ["Connect", "Callibrate", "Add Rig", "Settings", "Help", "About", "Logout"]
+side_panel_btns = ["Connect WiFi", "Callibrate", "Add Rig", "Settings", "Help", "About", "Logout"]
 
 # rigs list   TODO: make this a JSON with configs for each rig
 rigs = ["QC", "MCR", "Microcolumns", "Prod Lab"]
-
-class WiFiScanner(QThread):
-    def __init__(self):
-        self.connection_status = 0
-        self.network_list = []
-        #self.scan_for_networks()
-        
-    def get_wifi_list(self):
-        return self.network_list
-
-    def connect_to_wifi(self):
-        pass
-
-    def get_connection_status(self):
-        return self.connection_status
-    
-    def set_connection_status(self, status):
-        self.connection_status = status 
-
-    def scan_for_networks(self):
-        self.network_list.clear()
-
-        try:
-            if sys.platform.startswith('win'):
-                time.sleep(0.4)
-                command = ['netsh', 'wlan', 'show','networks']
-                output = subprocess.check_output(command, stderr=subprocess.STDOUT, text=True)
-
-                #extract SSIDs
-                current_ssid = None
-                ssids = []
-
-                for line in output.splitlines():
-                    #print(line)
-                    line = line.strip()
-
-                    if line.startswith("SSID"):
-                        parts = line.split(":", 1)
-                        if len(parts) == 2:
-                            current_ssid = parts[1].strip()
-                            if current_ssid and current_ssid not in ssids:
-                                ssids.append(current_ssid)
-
-
-                # add each network individually to network list 
-                for ssid in ssids:
-                    self.network_list.append(ssid)
-
-        except subprocess.CalledProcessError as e:
-            self.network_list.append(f"Error scanning: {e.output}")
-        except Exception as e:
-            self.network_list.append(f"An error occured: {e}")
-
-        
-
-# fetch available WIFI networks list
-wifi_network = WiFiScanner()
-wifi_network.scan_for_networks()
-print(wifi_network.network_list)
 
 class Rig():
     def __init__(self):
@@ -123,7 +64,7 @@ class Rig():
 
     def end_calibration(self):
         pass
-
+    
     def get_calibration_log(self):
         # todo: read from a file 
         return "calibration log"
@@ -248,7 +189,7 @@ class MainWindow(QMainWindow):
             self.side_panel_layout.addWidget(btn)
 
             # add slots 
-            if (button == "Connect"):
+            if (button == "Connect WiFi"):
                 btn.clicked.connect(self.connect_button_clicked)
 
         # tight look on buttons
@@ -295,16 +236,29 @@ class MainWindow(QMainWindow):
     def connect_button_clicked(self, s):
         print("click",s )
 
-        connect_dlg = CustomDialog(wifi_network.network_list)
+        connect_dlg = WiFiHandler()
 
         if connect_dlg.exec():
             print("Success")
         else :
             print("Cancel")
         
+if __name__ == "__main__":
+    app = QApplication([])
+    window = MainWindow()
+    window.show()
 
+    # apply theming styles
+    current_dir = os.path.dirname(os.path.abspath(__file__))
 
-app = QApplication([])
-window = MainWindow()
-window.show()
-app.exec()
+    # dark theme
+    #style_path = os.path.join(current_dir, 'dark-style.qss')
+
+    # light theme
+    style_path = os.path.join(current_dir, 'light-style.qss')
+
+    with open(style_path, 'r') as f:
+        _style = f.read()
+        app.setStyleSheet(_style)
+
+    app.exec()
