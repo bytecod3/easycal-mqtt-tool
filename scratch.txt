@@ -1,0 +1,19 @@
+Every rig is a class with properties e.g
+Rig name 
+number of sensors 
+id of sensors 
+last calibrated
+calibration log 
+METHODS
+set name 
+get name 
+get sensors 
+set sensors 
+get calibration log 
+update calibration log
+start calibration(sensor id)
+end calibration(sensor id)
+
+
+
+If we connect to a rig, we fetch all its properties from the firmware as JSON and display the relevant ones 
