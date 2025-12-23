@@ -4,9 +4,10 @@
 @email edwin@octaviacarbon.com
 """
 
-from PyQt5.QtCore import Qt, QSize
+from PyQt5.QtCore import Qt, QSize, QThread, pyqtSignal
 from PyQt5.QtGui import QIcon, QKeySequence
 from PyQt5.QtWidgets import (
+    QDialog,
     QWidget,
     QAction,
     QApplication,
@@ -21,8 +22,12 @@ from PyQt5.QtWidgets import (
     QPushButton,
     QStyle
 )
-import os
+
+import os, sys, subprocess
 from pathlib import Path
+import time 
+from custom_dialog import CustomDialog
+
 
 # resolve icons absolute paths
 script_dir = Path(__file__).parent
@@ -40,13 +45,14 @@ side_panel_btns = ["Connect", "Callibrate", "Add Rig", "Settings", "Help", "Abou
 # rigs list   TODO: make this a JSON with configs for each rig
 rigs = ["QC", "MCR", "Microcolumns", "Prod Lab"]
 
-class Network():
+class WiFiScanner(QThread):
     def __init__(self):
         self.connection_status = 0
-        self.available_networks = []
-        self.name = ""
+        self.network_list = []
+        #self.scan_for_networks()
         
-        pass
+    def get_wifi_list(self):
+        return self.network_list
 
     def connect_to_wifi(self):
         pass
@@ -57,13 +63,46 @@ class Network():
     def set_connection_status(self, status):
         self.connection_status = status 
 
-    def create_wifi_list(self):
+    def scan_for_networks(self):
+        self.network_list.clear()
 
-        pass
+        try:
+            if sys.platform.startswith('win'):
+                time.sleep(0.4)
+                command = ['netsh', 'wlan', 'show','networks']
+                output = subprocess.check_output(command, stderr=subprocess.STDOUT, text=True)
+
+                #extract SSIDs
+                current_ssid = None
+                ssids = []
+
+                for line in output.splitlines():
+                    #print(line)
+                    line = line.strip()
+
+                    if line.startswith("SSID"):
+                        parts = line.split(":", 1)
+                        if len(parts) == 2:
+                            current_ssid = parts[1].strip()
+                            if current_ssid and current_ssid not in ssids:
+                                ssids.append(current_ssid)
+
+
+                # add each network individually to network list 
+                for ssid in ssids:
+                    self.network_list.append(ssid)
+
+        except subprocess.CalledProcessError as e:
+            self.network_list.append(f"Error scanning: {e.output}")
+        except Exception as e:
+            self.network_list.append(f"An error occured: {e}")
+
+        
 
 # fetch available WIFI networks list
-network = Network()
-network.create_wifi_list()
+wifi_network = WiFiScanner()
+wifi_network.scan_for_networks()
+print(wifi_network.network_list)
 
 class Rig():
     def __init__(self):
@@ -208,6 +247,10 @@ class MainWindow(QMainWindow):
             self.configure_side_panel_push_buttons(btn, self.side_panel_btn_config)
             self.side_panel_layout.addWidget(btn)
 
+            # add slots 
+            if (button == "Connect"):
+                btn.clicked.connect(self.connect_button_clicked)
+
         # tight look on buttons
         self.side_panel_layout.insertStretch(-1,1) 
         self.side_panel_layout.setSpacing(30)
@@ -249,7 +292,17 @@ class MainWindow(QMainWindow):
         self.rig_tabs.addTab(new_rig_page, "Add")
         self.rig_tabs.setTabIcon(add_pane_index, QIcon(str(plus_icon_path)))
 
-            
+    def connect_button_clicked(self, s):
+        print("click",s )
+
+        connect_dlg = CustomDialog(wifi_network.network_list)
+
+        if connect_dlg.exec():
+            print("Success")
+        else :
+            print("Cancel")
+        
+
 
 app = QApplication([])
 window = MainWindow()
