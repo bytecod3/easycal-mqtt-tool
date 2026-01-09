@@ -8,20 +8,61 @@
 from os import waitstatus_to_exitcode
 import subprocess
 import sys
+import re
+import threading
 import time
-from PyQt5.QtCore import QLine, Qt, QSize
-from PyQt5.QtWidgets import QDialog, QDialogButtonBox, QLabel, QListWidget, QCheckBox, QHBoxLayout, QListWidgetItem, QVBoxLayout, QLineEdit, QPushButton
+from PyQt5.QtCore import QLine, Qt, QSize, pyqtSignal, QObject, QThread
+from PyQt5.QtWidgets import QDialog, QMessageBox, QDialogButtonBox, QLabel, QListWidget, QCheckBox, QHBoxLayout, QListWidgetItem, QVBoxLayout, QLineEdit, QPushButton
+
+# background scan object
+class WiFiScanWorker(QObject):
+    finished = pyqtSignal()
+
+    def run(self):
+        networks = []
+        try:
+            if sys.platform.startswith('win'):
+                #time.sleep(1)
+                command = ['netsh', 'wlan', 'show','networks', 'mode=bssid']
+                output = subprocess.check_output(
+                    command,
+                    stderr=subprocess.STDOUT,
+                    text=True,
+                    encoding='utf-8')
+
+                ssids = set()
+                ssid_pattern = re.compile(r"^SSID\s+\d+\s*:\s*(.+)$")
+
+                for line in output.splitlines():
+                    if "SSID" in line:
+                        print("DEBUG: ", line)
+
+                    line = line.strip()
+                    match = ssid_pattern.match(line)
+
+                    if match:
+                        ssid = match.group(1).strip()
+                        if ssid and ssid != "<Hidden Network>":
+                            ssids.add(ssid)
+
+                networks = sorted(ssids)
+
+        except Exception as e:
+            networks = [f"Error: {e}"]
+
+        self.finished.emit(networks)
+
 
 class WiFiHandler(QDialog):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Connect to WiFi")
         self.wifi_networks = []
+        self.scan_complete = False
 
         self.gui_spin_up()
-        self.scan_networks()
-        self.populate_network_list()
-          
+        self.start_scan()
+
         self.connection_status = 0
 
     def gui_spin_up(self):
@@ -42,7 +83,7 @@ class WiFiHandler(QDialog):
         selected_layout.addStretch()
         layout.addLayout(selected_layout)
 
-        # password selection 
+        # password selection
         layout.addWidget(QLabel("Password:"))
         self.password_input = QLineEdit()
         self.password_input.setEchoMode(QLineEdit.Password)
@@ -54,14 +95,14 @@ class WiFiHandler(QDialog):
         self.show_password_checkbox.toggled.connect(self.toggle_password_visibility)
         layout.addWidget(self.show_password_checkbox)
 
-        # buttons 
+        # buttons
         button_layout = QHBoxLayout()
 
         # refresh button
         self.refresh_button = QPushButton("Refresh")
         self.refresh_button.clicked.connect(self.refresh_networks)
         button_layout.addWidget(self.refresh_button)
-       
+
         # connect button
         self.connect_button = QPushButton("Connect")
         self.connect_button.clicked.connect(self.connect_to_wifi)
@@ -74,39 +115,65 @@ class WiFiHandler(QDialog):
         layout.addWidget(self.network_list_widget)
         self.setLayout(layout)
 
+    def start_scan(self):
+        self.network_list_widget.clear()
+        self.network_list_widget.addItem("Scanning...")
+        self.thread = QThread()
+        self.worker = WiFiScanWorker()
+        self.worker.moveToThread(self.thread)
+        self.thread.started.connect(self.worker.run)
+        self.worker.finished.connect(self.on_scan_finished)
+        self.worker.finished.connect(self.thread.quit)
+        self.worker.finished.connect(self.worker.deleteLater)
+        self.thread.finished.connect(self.thread.deleteLater)
+
+        self.thread.start()
+
+    def on_scan_finished(self, networks):
+        self.wifi_networks = networks
+        self.populate_network_list()
+
+    def check_scan_complete(self):
+        if self.scan_complete:
+            self.populate_network_list()
+
     def scan_networks(self):
         self.wifi_networks.clear()
 
         try:
             if sys.platform.startswith('win'):
-                time.sleep(0.4)
-                command = ['netsh', 'wlan', 'show','networks']
-                output = subprocess.check_output(command, stderr=subprocess.STDOUT, text=True)
+                # time.sleep(1)
+                command = ['netsh', 'wlan', 'show', 'networks', 'mode=bssid']
+                output = subprocess.check_output(
+                    command,
+                    stderr=subprocess.STDOUT,
+                    text=True,
+                    encoding='utf-8')
 
-                #extract SSIDs
-                current_ssid = None
-                ssids = []
+                ssids = set()
+                ssid_pattern = re.compile(r"^SSID\s+\d+\s*:\s*(.+)$")
 
                 for line in output.splitlines():
-                    #print(line)
+                    if "SSID" in line:
+                        print("DEBUG: ", line)
+
                     line = line.strip()
+                    match = ssid_pattern.match(line)
 
-                    if line.startswith("SSID"):
-                        parts = line.split(":", 1)
-                        if len(parts) == 2:
-                            current_ssid = parts[1].strip()
-                            if current_ssid and current_ssid not in ssids:
-                                ssids.append(current_ssid)
+                    if match:
+                        ssid = match.group(1).strip()
+                        if ssid and ssid != "<Hidden Network>":
+                            ssids.add(ssid)
+                            print(f"Found network: {ssid}")
 
-
-                # add each network individually to network list 
-                for ssid in ssids:
+                for ssid in sorted(ssids):
                     self.wifi_networks.append(ssid)
+                    self.scan_complete = True
 
         except subprocess.CalledProcessError as e:
             self.wifi_networks.append(f"Error scanning: {e.output}")
         except Exception as e:
-            self.wifi_netwks.append(f"An error occured: {e}")
+            self.wifi_networks.append(f"An error occurred: {e}")
 
     def refresh_networks(self):
         pass
@@ -131,13 +198,12 @@ class WiFiHandler(QDialog):
         """ check if network requires password """
         pass
 
-
     def on_network_selected(self, item):
         """ handle network selection """
         network_name = item.data(Qt.UserRole) or item.text()
         self.selected_label.setText(network_name)
 
-        # auto focus password field 
+        # auto focus password field
         self.password_input.setFocus()
 
     def on_network_double_clicked(self, item):
@@ -145,7 +211,7 @@ class WiFiHandler(QDialog):
         network_name = item.data(Qt.UserRole) or item.text()
         self.selected_label.setText(network_name)
 
-        # for open networks, no password 
+        # for open networks, no password
         if self.is_open_network(network_name):
             self.connect_to_network(network_name, "")
 
@@ -161,13 +227,13 @@ class WiFiHandler(QDialog):
         else:
             self.password_input.setEchoMode(QLineEdit.Password)
 
-
     def accept_connection(self):
         """ handle OK button clicks"""
         selected_items = self.network_list_widget.selectedItems()
-        if not selectected_items:
-            QMessageBox.warning(self, "No selection","Please select a network first")
+        if not selected_items:
+            QMessageBox.warning(self, "No selection", "Please select a network first")
 
     def connect_to_wifi(self):
         """ connect to the selected network """
-        pass 
+        pass
+
